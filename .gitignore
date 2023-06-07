@@ -165,7 +165,7 @@ cython_debug/
 
 # all generated files
 *.txt
-#*.csv
+*.csv
 
 # folders
 Results/
