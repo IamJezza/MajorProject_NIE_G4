@@ -1,6 +1,17 @@
 # MajorProject_NIE_G4
 This is the major project work of [POOJA](), [ASHISH](), [JAGRUTH]() and [SUHAS](https://github.com/IamJezza) of The national institute of engineering, Mysuru. 
 
+## Tools required/ used
+* iverilog
+* vvp
+* python 3.8
+  * `random`
+  * `pandas`
+  * `numpy` 
+  * `subprocess`
+  * `multiprocessing`
+* MatLab
+
 ## Discription of files
 The folder `FullAdders` consist of verilog implementation of full adder with single stuck at faults. `full_adder0.v` is the fault-free and the rest are faulty implementations. 
 
