@@ -1,4 +1,4 @@
-# MajorProject_NIE_G4
+# ATPG using Genetic Algorithm
 This is the major project work of [POOJA](), [ASHISH](), [JAGRUTH]() and [SUHAS](https://github.com/IamJezza) of The national institute of engineering, Mysuru. 
 
 ## Tools required/ used
