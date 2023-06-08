@@ -28,7 +28,7 @@ def gen_weights(Bit_len):
     """
     l = []
     for _ in range(Bit_len):
-        l.append(random.randint(0, 256))
+        l.append(random.randint(0, 255))
     return l
 
 
