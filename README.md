@@ -22,5 +22,5 @@ Folder `TestBenches` contains the test bench implementation of 8-bit excess 3 en
 `TXTtoCSV.py` collates all the output text files to a single text files of `DATA.txt`, this can be used to generate the `DATA.csv` file and further the **`transDATA.csv`**. 
 > **`transDATA.csv`** contains the data formated to be used with pandas, use this file for all further processing and **don't make changes to this.** 
 
-
+The folder `genetic_algorithm` contains both the genetic algorithm implementation and ATPG testing codes
 
