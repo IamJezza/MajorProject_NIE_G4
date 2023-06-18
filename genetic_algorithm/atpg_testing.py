@@ -1,6 +1,7 @@
 import subprocess
 import multiprocessing
 import random
+import time
 
 random.seed(0)
 
@@ -53,34 +54,33 @@ def create_FA_list(folder_path: str, num_list: list):
     return l
 
 
-global_list_array = []
+# result file
+# def testing(to_test, record_everything, process=0):
 
-random_num_list = rand_N_val_list(8, 28)
+# if record_everything:
+#     res_file = open('testing_result.txt', 'w')
+#     res_file.write("%\"testCase\",\t \"faultModel\",\t \"didFind\",\t \"whichIteration\",\t \"primaryInput\";\n")
+global_list_array = []
 correct_num_list = [0] * 8
+global_list_array.append(correct_num_list)
 my_weights = [255, 46, 115, 231, 185, 231, 115, 92]
 max_len = 15
 FA_folder_path = '../FullAdders/'
 TB_path = '../TestBenchs/test_bench.v'
-count = 0
-to_test = 1000
 
-# result file
-res_file = open('testing_result.txt', 'w')
-res_file.write("%\"testCase\",\t \"faultModel\",\t \"didFind\",\t \"whichIteration\",\t \"primaryInput\";\n")
 
-# testing
-for n in range(to_test):
+def test_the_files(process):
     random_num_list = rand_N_val_list(8, 28)
-    while random_num_list in [0]*8:
+    while random_num_list in global_list_array:
         random_num_list = rand_N_val_list(8, 28)
 
-    print(random_num_list)
+    # print(random_num_list)
 
     file_listc = [TB_path] + create_FA_list(FA_folder_path, correct_num_list)
     file_list = [TB_path] + create_FA_list(FA_folder_path, random_num_list)
 
-    if compile_verilog_files(file_listc, 'main0.vout'):
-        if compile_verilog_files(file_list, 'main1.vout'):
+    if compile_verilog_files(file_listc, 'main'+str(process)+'_0.vout'):
+        if compile_verilog_files(file_list, 'main'+str(process)+'_1.vout'):
             didFind = True
             ivalue_list = []
 
@@ -90,18 +90,28 @@ for n in range(to_test):
                 while ivalue in ivalue_list:
                     ivalue = gen_weighted_8bit_val(my_weights)
 
-                print('val =', ivalue)
-
-                if compare_ETC_outputs(['main0.vout', 'main1.vout'], ivalue):
-                    print("found!!!")
-                    res_file.write(str(n)+",\t "+','.join(map(str, random_num_list))+",\t "+str(int(didFind))+",\t "+str(iter_count)+",\t "+str(ivalue)+";\n")
-                    didFind = False
-                    break
-
+                if compare_ETC_outputs(['main'+str(process)+'_0.vout', 'main'+str(process)+'_1.vout'], ivalue):
+                    # if record_everything:
+                    #     res_file.write(str(n)+",\t "+','.join(map(str, random_num_list))+",\t "+str(int(didFind))+",
+                    #     \t "+str(iter_count)+",\t "+str(ivalue)+";\n")
+                    print("found")
+                    return True
                 ivalue_list.append(ivalue)
 
             if didFind:
-                print('not found!!!')
-                res_file.write(str(n)+",\t "+','.join(map(str, random_num_list))+",\t "+str(int(not didFind))+",\t "+str(-1)+",\t "+str(-1)+";\n")
+                print("not found!!!")
+                return False
 
-res_file.close()
+start = time.time()
+test = 1000
+det = 0
+esc = 0
+for i in range(test):
+    if test_the_files(1):
+        det += 1
+    else:
+        esc +=1
+
+print("The detected faults are", det)
+print("The fault coverage is", det/test*100)
+print('The time taken is', time.time()-start)
